@@ -21,18 +21,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 export default function Portfolio() {
-  const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState("home")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 3000)
-    return () => clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPosition({ x: e.clientX, y: e.clientY })
     }
@@ -44,10 +40,6 @@ export default function Portfolio() {
     setActiveSection(sectionId)
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
     setMobileMenuOpen(false)
-  }
-
-  if (loading) {
-    return <LoadingScreen />
   }
 
   return (
@@ -92,47 +84,6 @@ export default function Portfolio() {
       {/* Contact Section */}
       <ContactSection setIsHovering={setIsHovering} />
     </div>
-  )
-}
-
-function LoadingScreen() {
-  return (
-    <motion.div
-      className="fixed inset-0 bg-gradient-to-br from-black via-red-950 to-black flex items-center justify-center z-50"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="text-center">
-        <motion.div
-          className="w-20 h-20 border-4 border-red-400 border-t-transparent rounded-full mx-auto mb-8"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        />
-        <motion.h2
-          className="text-2xl font-bold text-white mb-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          Loading Portfolio...
-        </motion.h2>
-        <motion.div
-          className="flex space-x-1 justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="w-2 h-2 bg-red-400 rounded-full"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 0.6, repeat: Number.POSITIVE_INFINITY, delay: i * 0.2 }}
-            />
-          ))}
-        </motion.div>
-      </div>
-    </motion.div>
   )
 }
 
@@ -231,11 +182,11 @@ function HeroSection({ scrollToSection, setIsHovering }: any) {
             key={i}
             className="absolute w-1 h-1 bg-red-400/30 rounded-full" // Changed to red
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: typeof window !== 'undefined' ? Math.random() * window.innerWidth : 0,
+              y: typeof window !== 'undefined' ? Math.random() * window.innerHeight : 0,
             }}
             animate={{
-              y: [null, -100, null],
+              y: [0, -100, 0],
               opacity: [0, 1, 0],
             }}
             transition={{
