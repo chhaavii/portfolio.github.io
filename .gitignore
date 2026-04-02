@@ -26,5 +26,19 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Source files (keep built files for GitHub Pages)
+/app/
+/components/
+/hooks/
+/lib/
+/styles/
+/tailwind.config.ts
+/tsconfig.json
+/postcss.config.mjs
+/components.json
+/package.json
+/package-lock.json
+/pnpm-lock.yaml
+
 # documentation
 README.md
